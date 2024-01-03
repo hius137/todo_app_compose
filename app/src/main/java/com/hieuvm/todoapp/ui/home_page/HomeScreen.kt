@@ -43,15 +43,26 @@ import com.hieuvm.todoapp.ui.theme.TodoappTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(
+    onCreateNotes: () -> Unit,
+    onSearch: () -> Unit,
+    onClickInfo: () -> Unit,
+
+    ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = Color(0xff252525),
-        topBar = { TopBar() },
-        floatingActionButton = { FloatActionButton() }
+        topBar = {
+            TopBar(
+                onSearch = onSearch,
+                onClickInfo = onClickInfo,
+        ) },
+        floatingActionButton = { FloatActionButton(onCreateNotes) }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(12.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
             verticalArrangement = Arrangement.Center
         ) {
             ImageCenter()
@@ -64,7 +75,10 @@ fun HomeScreen(){
 //)
 
 @Composable
-fun TopBar() {
+fun TopBar(
+    onSearch: () -> Unit,
+    onClickInfo: () -> Unit,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -79,18 +93,24 @@ fun TopBar() {
                 .padding(12.dp),
         )
         Row(modifier = Modifier.padding(12.dp)) {
-            Button(imageVector = Icons.Default.Search)
+            Button(
+                imageVector = Icons.Default.Search,
+                onAction = onSearch
+                )
             Spacer(modifier = Modifier.width(12.dp))
-            Button(imageVector = Icons.Default.Info)
+            Button(
+                imageVector = Icons.Default.Info,
+                onAction = onClickInfo
+                )
         }
 
     }
 }
 
 @Composable
-fun FloatActionButton() {
+fun FloatActionButton(onCreateNotes: () -> Unit) {
     FloatingActionButton(
-        onClick = {  },
+        onClick = { onCreateNotes() },
         containerColor = Color(0xff3B3B3B),
         modifier = Modifier
             .padding(12.dp)
@@ -137,9 +157,12 @@ fun ImageCenter() {
 }
 
 @Composable
-fun Button(imageVector: ImageVector) {
+fun Button(
+    imageVector: ImageVector,
+    onAction: () -> Unit,
+    ) {
     IconButton(
-        onClick = { /*TODO*/ },
+        onClick = { onAction() },
         modifier = Modifier
             .height(50.dp)
             .width(50.dp)
